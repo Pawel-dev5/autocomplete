@@ -24,8 +24,6 @@ function App() {
         return data.name.match(regex)
       })
     }
-    console.log('matches', matches)
-    console.log(suggestions)
     setSuggestions(matches)
     setText(text)
   }
@@ -37,19 +35,29 @@ function App() {
   return (
     <div className="App">
       <main>
+        <h2>Sign in</h2>
         <input
           type='text'
           onChange={e => onChangeHandler(e.target.value)}
           value={text}
-          placeholder='username'
+          placeholder='Username'
         />
         {suggestions && suggestions.map((suggestions, i) =>
-          <div key={i} className='suggestion'
+          <div
+            key={i}
+            className='suggestion'
             onClick={() => onSuggestHandler(suggestions.name)}
           >
             {suggestions.name}
           </div>
         )}
+        <input
+          type='password'
+          placeholder='Password'
+        />
+        <button>
+          Sign in
+        </button>
       </main>
     </div>
   );
