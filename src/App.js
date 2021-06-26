@@ -1,5 +1,9 @@
 import './App.css';
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import FormContainer from './app/users/components/FormContainer';
+import Form from './app/users/components/Form';
+import { createStore } from 'redux'
+
 function App() {
   const [data, setData] = useState([]);
   const [text, setText] = useState('');
@@ -13,8 +17,6 @@ function App() {
     }
     fetchMyAPI()
   }, [])
-
-  console.log(data)
 
   const onChangeHandler = (text) => {
     let matches = [];
@@ -58,6 +60,8 @@ function App() {
         <button>
           Sign in
         </button>
+        <Form />
+        <FormContainer />
       </main>
     </div>
   );
