@@ -1,29 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+
+import { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { getAllUsers } from '../duck/operations';
+import { useSelector } from 'react-redux';
 
-const FormContainer = (props) => {
-    const users = useSelector(state => state.users)
-    const [data, setData] = useState(users.list);
-    console.log(users)
-    const dispatch = useDispatch();
-    useEffect(() => {
-        // setData(users)
-        dispatch(getAllUsers());
-        // getAllUsers()
-        setData(users.list)
-    }, []);
+const mapStateToProps = (state) => ({
+    users: state.users
+})
 
+const mapDispatchToProps = dispatch => ({
+    getAllUsers: () => dispatch(getAllUsers())
+})
+
+const FormContainer = ({ getAllUsers }) => {
     const [text, setText] = useState('');
     const [suggestions, setSuggestions] = useState([]);
+    const { name } = useSelector(state => state.users);
 
+    useEffect(() => {
+        getAllUsers()
+    }, [])
 
     const onChangeHandler = (text) => {
         let matches = [];
         if (text.length > 0) {
-            matches = data.filter(data => {
+            matches = name.filter(name => {
                 const regex = new RegExp(`${text}`, "gi");
-                return data.name.match(regex)
+                return name.name.match(regex)
             })
         }
         setSuggestions(matches)
@@ -34,46 +37,37 @@ const FormContainer = (props) => {
         setText(text);
         setSuggestions([]);
     }
-    console.log(data)
-    console.log(suggestions
-    )
-    return (
-        <>
-            <input
-                type='text'
-                onChange={e => onChangeHandler(e.target.value)}
-                value={text} j
-                placeholder='Username'
-            />
-            {suggestions && suggestions.map((suggestions, i) =>
-                <div
-                    key={i}
-                    className='suggestion'
-                    onClick={() => onSuggestHandler(suggestions.name)}
-                >
-                    {suggestions.name}
-                </div>
-            )}
-            <input
-                type='password'
-                placeholder='Password'
-            />
-            <button>
-                Sign in
-            </button>
-            {/* <>
-                <ul>
-                    {users.list.map((user) => {
-                        console.log(user)
-                        return (
-                            <li key={user.id}>{user}</li>
-                        )
-                    }
-                    )}
-                </ul>
-            </> */}
-        </>
-    )
-}
+    if (name !== undefined) {
+        return (
+            <div className='form-container'>
+                <h2>Sign in</h2>
+                <input
+                    type='text'
+                    onChange={e => onChangeHandler(e.target.value)}
+                    value={text}
+                    placeholder='Username'
+                />
+                {suggestions && suggestions.map((suggestions, i) =>
+                    <div
+                        key={i}
+                        className='suggestion'
+                        onClick={() => onSuggestHandler(suggestions.name)}
+                    >
+                        {suggestions.name}
+                    </div>
+                )}
+                <input
+                    type='password'
+                    placeholder='Password'
+                />
+                <button>
+                    Sign in
+                </button>
+            </div>
+        )
 
-export default FormContainer;
+    } else return <p>nie ma nic</p>
+}
+export default connect(
+    mapStateToProps, mapDispatchToProps
+)(FormContainer)
