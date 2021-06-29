@@ -1,3 +1,10 @@
+## React - Redux Autocomplete input from API by redux thunk, used libraries
+bootstrap,
+react-redux,
+redux,
+redux-devtools-extension,
+redux-thunk
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -15,7 +15,7 @@ const mapDispatchToProps = dispatch => ({
 const FormContainer = ({ getAllUsers }) => {
     const [text, setText] = useState('');
     const [suggestions, setSuggestions] = useState([]);
-    const { name } = useSelector(state => state.users);
+    const { list } = useSelector(state => state.users);
 
     useEffect(() => {
         getAllUsers()
@@ -24,9 +24,9 @@ const FormContainer = ({ getAllUsers }) => {
     const onChangeHandler = (text) => {
         let matches = [];
         if (text.length > 0) {
-            matches = name.filter(name => {
+            matches = list.filter(list => {
                 const regex = new RegExp(`${text}`, "gi");
-                return name.name.match(regex)
+                return list.name.match(regex)
             })
         }
         setSuggestions(matches)
@@ -37,36 +37,46 @@ const FormContainer = ({ getAllUsers }) => {
         setText(text);
         setSuggestions([]);
     }
-    if (name !== undefined) {
+    if (list !== undefined) {
         return (
             <div className='form-container'>
-                <h2>Sign in</h2>
-                <input
-                    type='text'
-                    onChange={e => onChangeHandler(e.target.value)}
-                    value={text}
-                    placeholder='Username'
-                />
-                {suggestions && suggestions.map((suggestions, i) =>
-                    <div
-                        key={i}
-                        className='suggestion'
-                        onClick={() => onSuggestHandler(suggestions.name)}
-                    >
-                        {suggestions.name}
-                    </div>
-                )}
-                <input
-                    type='password'
-                    placeholder='Password'
-                />
-                <button>
-                    Sign in
-                </button>
+                <h1>Sign in</h1>
+                <form>
+                    <input
+                        type='text'
+                        onChange={e => onChangeHandler(e.target.value)}
+                        value={text}
+                        placeholder='Username'
+                    />
+                    <ul>
+                        {suggestions && suggestions.map((suggestions, i) =>
+                            <li
+                                key={i}
+                                className='suggestion'
+                                onClick={() => onSuggestHandler(suggestions.name)}
+                            >
+                                {suggestions.name}
+                            </li>
+                        )}
+                    </ul>
+                    <input
+                        type='password'
+                        placeholder='Password'
+                    />
+                    <button type="submit">
+                        Sign in
+                    </button>
+                </form>
             </div>
         )
 
-    } else return <p>nie ma nic</p>
+    } else return (
+        <div className="App">
+            <div className="loader-container">
+                <div className="loader"></div>
+            </div>
+        </div>
+    )
 }
 export default connect(
     mapStateToProps, mapDispatchToProps
