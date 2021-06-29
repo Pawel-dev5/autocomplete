@@ -1,5 +1,4 @@
 ## React - Redux Autocomplete input from API by redux thunk, used libraries
-bootstrap,
 react-redux,
 redux,
 redux-devtools-extension,
